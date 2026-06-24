@@ -1,0 +1,4 @@
+.terminal/
+.env.local
+.ai-terminal.local.json
+node_modules/

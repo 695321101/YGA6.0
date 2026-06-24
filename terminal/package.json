@@ -1,0 +1,17 @@
+{
+  "name": "local-terminal",
+  "version": "1.0.0",
+  "description": "AI友好的本地代码运行终端 - 支持结构化摘要和完整日志",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "ai": "node ai.js",
+    "session": "node session.js",
+    "logs": "node logs.js"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "dependencies": {
+    "node-pty": "^1.1.0"
+  }
+}

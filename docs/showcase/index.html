@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YGA 6.0 - Future Workbench Preview</title>
+  <style>
+    :root {
+      --ink: #17181c;
+      --ink-soft: #4c5563;
+      --paper: #f7f8fb;
+      --panel: #ffffff;
+      --panel-dark: #22252b;
+      --panel-muted: #eef1f5;
+      --line: #d9dee7;
+      --line-dark: #343943;
+      --green: #19a974;
+      --green-soft: #e6f6ef;
+      --blue: #2563eb;
+      --blue-soft: #e8f0ff;
+      --amber: #b7791f;
+      --amber-soft: #fff4da;
+      --coral: #dd5b4f;
+      --coral-soft: #ffeceb;
+      --radius: 8px;
+      --shadow: 0 24px 80px rgba(31, 36, 46, 0.16);
+      --font: "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      overflow-x: hidden;
+      width: 100%;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: var(--font);
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    textarea {
+      font: inherit;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 64px;
+      padding: 0 5vw;
+      color: #f8fafc;
+      background: #17181c;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+      font-weight: 700;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      border-radius: 8px;
+      font-size: 0.86rem;
+      flex: 0 0 auto;
+    }
+
+    .brand span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #c8d0dc;
+      font-size: 0.88rem;
+    }
+
+    .nav a {
+      min-height: 36px;
+      padding: 0.45rem 0.75rem;
+      border: 1px solid transparent;
+      border-radius: 8px;
+    }
+
+    .nav a:hover {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.62fr) minmax(0, 1.38fr);
+      gap: clamp(1.25rem, 3vw, 2.5rem);
+      align-items: center;
+      min-height: calc(100vh - 64px);
+      padding: clamp(1.5rem, 4vw, 4rem) 5vw;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.66)),
+        linear-gradient(135deg, #f7f8fb 0%, #f3f7f2 38%, #eef4ff 100%);
+    }
+
+    .hero-copy {
+      width: 100%;
+      max-width: 560px;
+      min-width: 0;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      max-width: 100%;
+      min-height: 30px;
+      padding: 0.25rem 0.65rem;
+      color: var(--green);
+      background: var(--green-soft);
+      border: 1px solid rgba(25, 169, 116, 0.22);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    h1 {
+      margin-top: 1rem;
+      font-size: clamp(2.4rem, 7vw, 5.8rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 520px;
+      margin-top: 1rem;
+      color: var(--ink-soft);
+      font-size: clamp(1rem, 1.4vw, 1.18rem);
+      overflow-wrap: anywhere;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 1.4rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0.68rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .button.primary {
+      color: #ffffff;
+      background: #17181c;
+      border-color: #17181c;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.65rem;
+      margin-top: 1.6rem;
+      max-width: 520px;
+    }
+
+    .fact {
+      padding: 0.85rem;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .fact strong {
+      display: block;
+      font-size: 1.1rem;
+    }
+
+    .fact span {
+      display: block;
+      margin-top: 0.15rem;
+      color: var(--ink-soft);
+      font-size: 0.78rem;
+    }
+
+    .workbench {
+      width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      min-height: 680px;
+      background: #17181c;
+      border: 1px solid #2b3038;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .windowbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      height: 46px;
+      padding: 0 0.9rem;
+      color: #aeb8c7;
+      background: #22252b;
+      border-bottom: 1px solid var(--line-dark);
+      font-size: 0.82rem;
+    }
+
+    .lights {
+      display: flex;
+      gap: 0.42rem;
+      flex: 0 0 auto;
+    }
+
+    .lights span {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+
+    .lights span:nth-child(1) { background: #ec6a5e; }
+    .lights span:nth-child(2) { background: #f4bf4f; }
+    .lights span:nth-child(3) { background: #61c554; }
+
+    .url {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .windowbar > div:last-child {
+      flex: 0 0 auto;
+    }
+
+    .stage {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr) 286px;
+      min-height: 634px;
+      min-width: 0;
+    }
+
+    .rail,
+    .assistant,
+    .preview {
+      min-width: 0;
+    }
+
+    .rail {
+      padding: 1rem;
+      color: #f8fafc;
+      background: #202329;
+      border-right: 1px solid var(--line-dark);
+    }
+
+    .rail-title,
+    .pane-title {
+      color: #dce3ee;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .job {
+      margin-top: 0.85rem;
+      padding: 0.9rem;
+      background: #2a2e36;
+      border: 1px solid #3b414c;
+      border-radius: 8px;
+    }
+
+    .job h2 {
+      font-size: 1rem;
+      line-height: 1.3;
+    }
+
+    .job p {
+      margin-top: 0.35rem;
+      color: #aeb8c7;
+      font-size: 0.82rem;
+    }
+
+    .pipeline {
+      display: grid;
+      gap: 0.65rem;
+      margin-top: 1rem;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: 0.65rem;
+      align-items: start;
+      padding: 0.7rem;
+      background: #252932;
+      border: 1px solid #353b46;
+      border-radius: 8px;
+    }
+
+    .step i {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      color: #ffffff;
+      background: #434a57;
+      font-style: normal;
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .step.done i { background: var(--green); }
+    .step.active i {
+      background: var(--blue);
+      animation: breathe 1.4s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.32); }
+      50% { box-shadow: 0 0 0 7px rgba(37, 99, 235, 0); }
+    }
+
+    .step strong {
+      display: block;
+      color: #f8fafc;
+      font-size: 0.86rem;
+    }
+
+    .step span {
+      display: block;
+      color: #aeb8c7;
+      font-size: 0.74rem;
+    }
+
+    .preview {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      background: #f3f5f8;
+    }
+
+    .preview-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.85rem;
+      color: var(--ink-soft);
+      font-size: 0.8rem;
+    }
+
+    .device {
+      flex: 1;
+      min-height: 470px;
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .appbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      min-height: 58px;
+      padding: 0 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .appbar strong {
+      font-size: 1rem;
+    }
+
+    .status-pill {
+      min-height: 28px;
+      padding: 0.28rem 0.55rem;
+      color: var(--green);
+      background: var(--green-soft);
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .balance {
+      min-height: 148px;
+      padding: 1rem;
+      color: #ffffff;
+      background: #17181c;
+      border-radius: 8px;
+    }
+
+    .balance span {
+      color: #c8d0dc;
+      font-size: 0.8rem;
+    }
+
+    .balance strong {
+      display: block;
+      margin-top: 0.35rem;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      line-height: 1;
+    }
+
+    .chart {
+      display: flex;
+      align-items: end;
+      gap: 0.45rem;
+      min-height: 148px;
+      padding: 0.85rem;
+      background: var(--panel-muted);
+      border-radius: 8px;
+    }
+
+    .bar {
+      flex: 1;
+      min-width: 18px;
+      border-radius: 6px 6px 0 0;
+      background: var(--blue);
+    }
+
+    .bar:nth-child(2) { height: 58%; background: var(--green); }
+    .bar:nth-child(3) { height: 76%; background: var(--amber); }
+    .bar:nth-child(4) { height: 42%; background: var(--coral); }
+    .bar:nth-child(5) { height: 68%; background: var(--blue); }
+
+    .app-list {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 0.65rem;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr) max-content;
+      gap: 0.75rem;
+      align-items: center;
+      min-height: 58px;
+      padding: 0.65rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .row b {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-radius: 8px;
+      font-size: 0.82rem;
+    }
+
+    .row:nth-child(2) b {
+      color: var(--amber);
+      background: var(--amber-soft);
+    }
+
+    .row:nth-child(3) b {
+      color: var(--coral);
+      background: var(--coral-soft);
+    }
+
+    .row strong {
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    .row span {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 0.76rem;
+    }
+
+    .row em {
+      color: var(--ink);
+      font-style: normal;
+      font-weight: 800;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .demo-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+    }
+
+    .demo-actions button {
+      min-height: 36px;
+      padding: 0.48rem 0.72rem;
+      color: var(--ink);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .demo-actions button:hover {
+      border-color: var(--blue);
+    }
+
+    .assistant {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      color: #f8fafc;
+      background: #202329;
+      border-left: 1px solid var(--line-dark);
+    }
+
+    .thread {
+      display: grid;
+      align-content: start;
+      gap: 0.72rem;
+      flex: 1;
+      margin-top: 0.85rem;
+    }
+
+    .msg {
+      max-width: 100%;
+      padding: 0.72rem 0.82rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+    }
+
+    .msg.ai {
+      color: #e8eef8;
+      background: #2a2e36;
+      border: 1px solid #3b414c;
+    }
+
+    .msg.user {
+      color: #ffffff;
+      background: #1d4ed8;
+      justify-self: end;
+    }
+
+    .input {
+      display: grid;
+      gap: 0.6rem;
+      margin-top: 1rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--line-dark);
+    }
+
+    .input textarea {
+      width: 100%;
+      min-height: 76px;
+      resize: none;
+      color: #f8fafc;
+      background: #17181c;
+      border: 1px solid #3b414c;
+      border-radius: 8px;
+      padding: 0.75rem;
+    }
+
+    .input textarea:focus {
+      outline: 2px solid rgba(37, 99, 235, 0.35);
+      border-color: var(--blue);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .chip {
+      min-height: 32px;
+      padding: 0.38rem 0.58rem;
+      color: #dce3ee;
+      background: #2a2e36;
+      border: 1px solid #3b414c;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.76rem;
+    }
+
+    .chip:hover {
+      color: #ffffff;
+      border-color: #5f6b7c;
+    }
+
+    .section {
+      padding: clamp(2.5rem, 6vw, 5rem) 5vw;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 1.4rem;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin-top: 0.65rem;
+      color: var(--ink-soft);
+    }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.9rem;
+    }
+
+    .module {
+      min-height: 180px;
+      padding: 1rem;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .module small {
+      color: var(--ink-soft);
+      font-weight: 800;
+    }
+
+    .module h3 {
+      margin-top: 0.5rem;
+      font-size: 1.04rem;
+    }
+
+    .module p {
+      margin-top: 0.5rem;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+    }
+
+    .road {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 1.2rem;
+      align-items: start;
+      background: #17181c;
+      color: #f8fafc;
+    }
+
+    .road p {
+      color: #aeb8c7;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .mile {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: 0.9rem;
+      min-height: 84px;
+      padding: 0.9rem;
+      background: #22252b;
+      border: 1px solid #343943;
+      border-radius: 8px;
+    }
+
+    .mile b {
+      color: var(--green);
+      font-size: 0.82rem;
+    }
+
+    .mile strong {
+      display: block;
+      font-size: 1rem;
+    }
+
+    .mile span {
+      display: block;
+      margin-top: 0.25rem;
+      color: #aeb8c7;
+      font-size: 0.86rem;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.25rem 5vw;
+      color: var(--ink-soft);
+      background: #ffffff;
+      border-top: 1px solid var(--line);
+      font-size: 0.86rem;
+    }
+
+    @media (max-width: 1180px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .workbench {
+        min-height: 620px;
+      }
+    }
+
+    @media (max-width: 1500px) {
+      .row {
+        grid-template-columns: 36px minmax(0, 1fr);
+      }
+
+      .row em {
+        grid-column: 2;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .stage {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .rail,
+      .assistant {
+        border: 0;
+      }
+
+      .module-grid,
+      .road {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .topbar {
+        position: static;
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 0.9rem 1rem;
+      }
+
+      .nav {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 0.15rem;
+      }
+
+      .hero,
+      .section {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .hero-copy,
+      .workbench,
+      .stage {
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      .facts,
+      .demo-grid,
+      .module-grid,
+      .road {
+        grid-template-columns: 1fr;
+      }
+
+      .workbench {
+        min-height: 0;
+      }
+
+      .windowbar {
+        gap: 0.55rem;
+        padding: 0 0.75rem;
+      }
+
+      .url {
+        text-align: left;
+      }
+
+      .windowbar > div:last-child {
+        display: none;
+      }
+
+      .preview-head {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .device {
+        min-height: 0;
+      }
+
+      .row {
+        grid-template-columns: 36px minmax(0, 1fr);
+      }
+
+      .row em {
+        grid-column: 2;
+      }
+
+      .mile {
+        grid-template-columns: 1fr;
+      }
+
+      footer {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../../README.md" aria-label="YGA 6.0 README">
+      <span class="mark">YGA</span>
+      <span>YGA 6.0</span>
+    </a>
+    <nav class="nav" aria-label="页面导航">
+      <a href="#preview">概念预览</a>
+      <a href="#modules">开源模块</a>
+      <a href="#roadmap">路线图</a>
+      <a href="https://github.com/695321101/YGA6.0">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="preview">
+      <div class="hero-copy">
+        <span class="eyebrow">非最终产品界面 · 当前开源版为 Python 流水线后端</span>
+        <h1>YGA 6.0</h1>
+        <p class="lead">让完全不懂代码的人，也能从一句自然语言开始，得到规划、代码、检查和评审都闭环的可运行软件。</p>
+        <div class="hero-actions">
+          <a class="button primary" href="../../README.md">查看 README</a>
+          <a class="button" href="https://github.com/695321101/YGA6.0/issues">提交 Issue</a>
+        </div>
+        <div class="facts" aria-label="开源快照摘要">
+          <div class="fact"><strong>Memory</strong><span>记录需求与阶段</span></div>
+          <div class="fact"><strong>Pipeline</strong><span>生成与本地检查</span></div>
+          <div class="fact"><strong>Review</strong><span>AI 评审交付物</span></div>
+        </div>
+      </div>
+
+      <div class="workbench" aria-label="YGA 工作台概念预览">
+        <div class="windowbar">
+          <div class="lights" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="url">yga://workspace/simple-budget-app</div>
+          <div>offline e2e ready</div>
+        </div>
+
+        <div class="stage">
+          <aside class="rail">
+            <div class="rail-title">生成链路</div>
+            <div class="job">
+              <h2>家庭记账小工具</h2>
+              <p>收入、支出、分类和月度汇总。</p>
+            </div>
+            <div class="pipeline">
+              <div class="step done"><i>1</i><div><strong>Memory</strong><span>需求与契约已记录</span></div></div>
+              <div class="step done"><i>2</i><div><strong>PMC</strong><span>蓝图与任务队列已确认</span></div></div>
+              <div class="step active"><i>3</i><div><strong>Pipeline</strong><span>正在生成可运行项目</span></div></div>
+              <div class="step"><i>4</i><div><strong>Review</strong><span>等待本地检查与 AI 评审</span></div></div>
+            </div>
+          </aside>
+
+          <section class="preview">
+            <div class="preview-head">
+              <span>生成页面预览</span>
+              <span>YGA Studio Browser</span>
+            </div>
+            <div class="device" id="device">
+              <div class="appbar">
+                <strong id="appTitle">我的记账本</strong>
+                <span class="status-pill" id="statusText">已本地保存</span>
+              </div>
+              <div class="demo-grid">
+                <div class="balance">
+                  <span>本月支出</span>
+                  <strong id="amount">¥ 1,280</strong>
+                </div>
+                <div class="chart" aria-label="支出趋势图">
+                  <div class="bar" style="height: 46%"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="app-list">
+                  <div class="row"><b>餐</b><div><strong>餐饮</strong><span>今天 12:40</span></div><em>- ¥ 36</em></div>
+                  <div class="row"><b>交</b><div><strong>交通</strong><span>今天 09:10</span></div><em>- ¥ 8</em></div>
+                  <div class="row"><b>薪</b><div><strong>工资</strong><span>本月 01 日</span></div><em>+ ¥ 8,000</em></div>
+                </div>
+              </div>
+            </div>
+            <div class="demo-actions" aria-label="概念交互">
+              <button type="button" onclick="applyIdea('green')">绿色主按钮</button>
+              <button type="button" onclick="applyIdea('title')">改标题</button>
+              <button type="button" onclick="applyIdea('dark')">深色预览</button>
+            </div>
+          </section>
+
+          <aside class="assistant">
+            <div class="pane-title">AI 协作</div>
+            <div class="thread">
+              <div class="msg ai">请确认这个软件的首屏：本月支出、分类流水和趋势图已经生成。</div>
+              <div class="msg user">把标题改亲切一点，按钮用绿色，整体更清爽。</div>
+              <div class="msg ai" id="assistantReply">收到。我会保持功能不变，只调整界面表达并重新检查可运行性。</div>
+            </div>
+            <div class="input">
+              <textarea aria-label="输入给 AI 的修改要求" placeholder="例如：把标题改成家庭小账本，绿色更明显一点"></textarea>
+              <div class="chips">
+                <button class="chip" type="button" onclick="applyIdea('green')">绿色按钮</button>
+                <button class="chip" type="button" onclick="applyIdea('title')">家庭小账本</button>
+                <button class="chip" type="button" onclick="applyIdea('dark')">深色版</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="modules">
+      <div class="section-head">
+        <h2>当前开源快照包含后端核心链路。</h2>
+        <p>这个版本重点展示 YGA 如何把普通人的自然语言需求变成可检查、可评审、可持续迭代的软件生成流程。</p>
+      </div>
+      <div class="module-grid">
+        <article class="module">
+          <small>01</small>
+          <h3>Memory</h3>
+          <p>管理 Session、需求记录、阶段门禁、快照和变更 pending。</p>
+        </article>
+        <article class="module">
+          <small>02</small>
+          <h3>PMC</h3>
+          <p>把用户目标转为规划蓝图，并决定后续任务队列。</p>
+        </article>
+        <article class="module">
+          <small>03</small>
+          <h3>Pipeline</h3>
+          <p>生成接口契约和代码，再交给 LocalGate 做确定性检查。</p>
+        </article>
+        <article class="module">
+          <small>04</small>
+          <h3>Review</h3>
+          <p>对 AI 产物进行质量评审，避免只生成“看起来能跑”的项目。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section road" id="roadmap">
+      <div class="section-head">
+        <h2>前端线会把这条链路交到普通人手里。</h2>
+        <p>Web 工作台和 YGA Studio 浏览器仍是后续方向，本页面展示的是产品体验目标，不代表当前仓库已经包含完整前端运行时。</p>
+      </div>
+      <div class="timeline">
+        <div class="mile"><b>现在</b><div><strong>Python 后端链路</strong><span>离线 E2E 可跑，核心模块已开源。</span></div></div>
+        <div class="mile"><b>下一步</b><div><strong>Web 工作台</strong><span>需求确认、进度查看、交付入口变成可视化流程。</span></div></div>
+        <div class="mile"><b>未来</b><div><strong>YGA Studio 浏览器</strong><span>点选页面元素，用自然语言和 AI 一起改界面。</span></div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>YGA 6.0 · Built for everyone who wants software, not syntax.</span>
+    <span>Concept preview, not the final product UI.</span>
+  </footer>
+
+  <script>
+    function applyIdea(kind) {
+      const device = document.getElementById('device');
+      const title = document.getElementById('appTitle');
+      const amount = document.getElementById('amount');
+      const status = document.getElementById('statusText');
+      const reply = document.getElementById('assistantReply');
+
+      if (kind === 'green') {
+        status.textContent = '绿色方案已应用';
+        status.style.background = '#e6f6ef';
+        status.style.color = '#13885e';
+        amount.style.color = '#8ff0c5';
+        reply.textContent = '绿色强调已应用，关键金额和状态更醒目。';
+      }
+
+      if (kind === 'title') {
+        title.textContent = '家庭小账本';
+        reply.textContent = '标题已改得更亲切，功能结构保持不变。';
+      }
+
+      if (kind === 'dark') {
+        device.style.background = '#202329';
+        device.style.color = '#f8fafc';
+        reply.textContent = '深色预览已切换，我会继续检查文字对比度。';
+      }
+    }
+  </script>
+</body>
+</html>

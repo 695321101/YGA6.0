@@ -1,0 +1,50 @@
+# browser（开源发布版不含；前端线在后续分支开发）
+browser/
+
+# AI 配置（含密钥，仅本地）
+config/ai_config.json
+
+# Session 与生成物运行时数据
+memory/sessions/
+output/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.env.local
+
+# Node
+node_modules/
+npm-debug.log*
+
+# terminal 本地运行产物
+terminal/.terminal/
+terminal/.env.local
+terminal/.ai-terminal.local.json
+.backup-terminal-*/
+
+# browser 构建与发布产物
+browser/artifacts/
+browser/**/bin/
+browser/**/obj/
+browser/wpf-shell/**/publish/
+
+# IDE / 工具本地配置
+.claude/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# 系统与临时
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# 内部备份
+browser/Backup_*/
